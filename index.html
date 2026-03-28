@@ -304,10 +304,11 @@
         function sendToWhatsApp(){
             const name = document.getElementById('userName').value;
             const phone = document.getElementById('userPhone').value;
+            const amt = document.getElementById('userAmount').value;
             const email = document.getElementById('userEmail').value || "Not Provided";
             const txn = document.getElementById('userTxn').value || "Not Provided";
             
-            const msg = `*NEW COURSE PURCHASE*%0A*Name:* ${name}%0A*Phone:* ${phone}%0A*Paid Amount:* NPR ${amt}%0A*Email:* ${email}%0A*TXN ID:* ${txn}%0A*Method:* ${selectedMethod}`;
+            const msg = `*NEW COURSE PURCHASE*%0A*Full Name:* ${name}%0A*Mobile Number:* ${phone}%0A*Paid Amount:* NPR ${amt}%0A*Email:* ${email}%0A*TXN ID:* ${txn}%0A*Method:* ${selectedMethod}`;
             window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
             document.getElementById('successModal').classList.remove('hidden');
         }
