@@ -57,7 +57,7 @@
             font-weight: 800;
         }
         .glow-button:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 200, 83, 0.4); }
-        .glow-button:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
+       
     </style>
 </head>
 <body class="py-6 md:py-12 px-4">
@@ -181,7 +181,7 @@
                             <input id="userAmount" class="w-full p-3 rounded-lg text-green-500 font-bold border-green-500/40 bg-green-500/5 cursor-not-allowed" value="299" readonly>
                         </div>
                     </div>
-                    <button id="submitBtn" onclick="sendToWhatsApp()" class="w-full glow-button py-4 rounded-xl shadow-lg mt-2 uppercase" disabled>ACCESS NOW 🚀</button>
+                    <button id="submitBtn" onclick="sendToWhatsApp()" class="w-full glow-button py-4 rounded-xl shadow-lg mt-2 uppercase">ACCESS NOW 🚀</button>
                 </div>
             </div>
 
@@ -258,60 +258,87 @@
         }
 
         // --- VALIDATION LOGIC ---
-        function validateField(input, type) {
-            const val = input.value.trim();
-            const icon = document.getElementById(type + 'Icon');
-            let isValid = false;
+function validateField(input, type) {
+    const val = input.value.trim();
+    const icon = document.getElementById(type + 'Icon');
+    let isValid = false;
 
-            if (type === 'name') {
-                isValid = /^[a-zA-Z\s]{5,}$/.test(val);
-            } else if (type === 'phone') {
-                isValid = /^(98|97)[0-9]{8}$/.test(val);
-            } else if (type === 'email') {
-                isValid = val === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-            } else if (type === 'txn') {
-                isValid = val === "" || val.length >= 5;
-            }
+    if (type === 'name') {
+        isValid = /^[a-zA-Z\s]{5,}$/.test(val);
+    } else if (type === 'phone') {
+        isValid = /^(98|97)[0-9]{8}$/.test(val);
+    } else if (type === 'email') {
+        isValid = val === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    } else if (type === 'txn') {
+        isValid = val === "" || val.length >= 5;
+    }
 
-            if (val === "" && (type === 'email' || type === 'txn')) {
-                input.classList.remove('is-valid', 'is-invalid');
-                icon.style.display = 'none';
-            } else if (isValid) {
-                input.classList.add('is-valid');
-                input.classList.remove('is-invalid');
-                icon.innerHTML = "✅";
-                icon.style.display = "block";
-                icon.style.color = "var(--primary-green)";
-            } else {
-                input.classList.add('is-invalid');
-                input.classList.remove('is-valid');
-                icon.innerHTML = "❌";
-                icon.style.display = "block";
-                icon.style.color = "#ff4444";
-            }
-            checkFormValidity();
-        }
+    if (val === "" && (type === 'email' || type === 'txn')) {
+        input.classList.remove('is-valid', 'is-invalid');
+        icon.style.display = 'none';
+    } else if (isValid) {
+        input.classList.add('is-valid');
+        input.classList.remove('is-invalid');
+        icon.innerHTML = "✅";
+        icon.style.display = "block";
+        icon.style.color = "var(--primary-green)";
+    } else {
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
+        icon.innerHTML = "❌";
+        icon.style.display = "block";
+        icon.style.color = "#ff4444";
+    }
+}
 
-        function checkFormValidity() {
-            const isNameOk = document.getElementById('userName').classList.contains('is-valid');
-            const isPhoneOk = document.getElementById('userPhone').classList.contains('is-valid');
-            const isEmailInvalid = document.getElementById('userEmail').classList.contains('is-invalid');
-            const isTxnInvalid = document.getElementById('userTxn').classList.contains('is-invalid');
+function sendToWhatsApp() {
+    const name = document.getElementById('userName').value.trim();
+    const phone = document.getElementById('userPhone').value.trim();
+    const email = document.getElementById('userEmail').value.trim();
+    const txn = document.getElementById('userTxn').value.trim();
+    const amt = document.getElementById('userAmount').value;
 
-            document.getElementById('submitBtn').disabled = !(isNameOk && isPhoneOk && !isEmailInvalid && !isTxnInvalid);
-        }
+    // Validation Checks
+    if (name.length < 5) {
+        alert("कृपया आफ्नो पूरा नाम (कम्तिमा ५ अक्षर) लेख्नुहोस्!");
+        document.getElementById('userName').focus();
+        return;
+    }
+    if (!/^(98|97)[0-9]{8}$/.test(phone)) {
+        alert("कृपया सही मोबाइल नम्बर (९७ वा ९८ बाट सुरु हुने १० अंक) लेख्नुहोस्!");
+        document.getElementById('userPhone').focus();
+        return;
+    }
+    if (email !== "" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("कृपया सही ईमेल ठेगाना लेख्नुहोस्!");
+        document.getElementById('userEmail').focus();
+        return;
+    }
+    if (txn !== "" && txn.length < 5) {
+        alert("कृपया सही TXN ID लेख्नुहोस्!");
+        document.getElementById('userTxn').focus();
+        return;
+    }
 
-        function sendToWhatsApp(){
-            const name = document.getElementById('userName').value;
-            const phone = document.getElementById('userPhone').value;
-            const amt = document.getElementById('userAmount').value;
-            const email = document.getElementById('userEmail').value || "Not Provided";
-            const txn = document.getElementById('userTxn').value || "Not Provided";
-            
-            const msg = `*NEW COURSE PURCHASE*%0A*Full Name:* ${name}%0A*Mobile Number:* ${phone}%0A*Paid Amount:* NPR ${amt}%0A*Email:* ${email}%0A*TXN ID:* ${txn}%0A*Method:* ${selectedMethod}`;
-            window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
-            document.getElementById('successModal').classList.remove('hidden');
-        }
+    // WhatsApp Message
+    const msg = `*NEW COURSE PURCHASE*%0A*Full Name:* ${name}%0A*Mobile Number:* ${phone}%0A*Paid Amount:* NPR ${amt}%0A*Email:* ${email || "Not Provided"}%0A*TXN ID:* ${txn || "Not Provided"}%0A*Method:* ${selectedMethod}`;
+    
+    window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
+    document.getElementById('successModal').classList.remove('hidden');
+    resetForm(); 
+}
+
+function resetForm() {
+    document.getElementById('userName').value = "";
+    document.getElementById('userPhone').value = "";
+    document.getElementById('userEmail').value = "";
+    document.getElementById('userTxn').value = "";
+    document.querySelectorAll('.status-icon').forEach(icon => icon.style.display = 'none');
+    document.querySelectorAll('input').forEach(input => {
+        if(!input.readOnly) input.classList.remove('is-valid', 'is-invalid');
+    });
+}
+
     </script>
 </body>
 </html>
