@@ -266,8 +266,8 @@
             const qrDiv = document.getElementById('qrcode');
             qrDiv.innerHTML = "";
             let qrPayload = (selectedMethod === "eSewa" || selectedMethod === "Khalti") 
-                ? `{ "ID":"9702784684", "Name":"Md Nasibul Rain", "Amount":"299" }`
-                : `{ "Acc":"1355752808508001", "Name":"MD NASIBUL RAIN", "Amount":"299" }`;
+                ? `{ "ID":"9807648317", "Name":"Ishul Kawari", "Amount":"299" }`
+                : `{ "Acc":"0315759479191001", "Name":"ISHUL KAWARI", "Amount":"299" }`;
 
             new QRCode(qrDiv, { text: qrPayload, width: 200, height: 200, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
             document.getElementById('postQR').classList.remove('hidden');
@@ -356,5 +356,6 @@ function resetForm() {
 }
 
     </script>
+
 </body>
 </html>
