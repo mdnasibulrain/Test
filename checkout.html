@@ -215,7 +215,8 @@
             </div>
             <h2 class="text-2xl font-bold text-white mb-2">Details Sent! ✅</h2>
             <p class="text-gray-400 text-sm mb-6 leading-relaxed">हाम्रो टीमले तपाईंको भुक्तानी प्रमाणित गर्दैछ। कृपया <span class="text-yellow-500 font-bold">२-५ मिनेट</span> कुर्नुहोस्।</p>
-            <button onclick="window.location.reload()" class="w-full glow-button py-3 rounded-xl uppercase">OK, म बुझ्छु</button>
+            <button onclick="window.location.href='index.html'" class="w-full glow-button py-3 rounded-xl uppercase">OK, म बुझ्छु</button>
+
         </div>
     </div>
 
@@ -405,6 +406,14 @@ function sendToWhatsApp() {
     
     window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
     document.getElementById('successModal').classList.remove('hidden');
+    
+    // Optional: 5 second pachhi aafai Landing Page ma pathaune yadi user le click garena bhane pani
+    /*
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 5000);
+    */
+    
     resetForm(); 
 }
 
