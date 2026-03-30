@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | Premium Gateway</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #FFD600;
+            --primary-green: #00C853;
+            --bg-dark: #0f0f0f;
+            --card-bg: #161616;
+            --main-gradient: linear-gradient(135deg, var(--primary-gold), var(--primary-green));
+        }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg-dark); color: #f3f4f6; }
+        
+        .gradient-text { background: var(--main-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient-bg { background: var(--main-gradient); }
+        
+        .step-window { display: none; }
+        .step-window.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .method-item { cursor: pointer; transition: all 0.3s; border: 1.5px solid #262626; background: var(--card-bg); }
+        .method-item:hover { border-color: var(--primary-gold); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 214, 0, 0.1); }
+        
+        #qrcode { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin: 20px auto; 
+}
+#qrcode canvas, #qrcode img { 
+    border: 8px solid #fff; 
+    border-radius: 12px; 
+    max-width: 100%; 
+    height: auto !important; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+        
+        /* Input Styling with Validation States */
+        .input-wrapper { position: relative; }
+        input { 
+            background: #0a0a0a !important; 
+            border: 1px solid #262626 !important; 
+            color: white !important; 
+            transition: all 0.3s ease;
+            outline: none !important;
+        }
+        
+        /* Glow effect when filled */
+        input:not(:placeholder-shown) { background: #0d0d0d !important; box-shadow: 0 0 10px rgba(255, 255, 255, 0.02); }
+
+        /* Validation Borders */
+        input.is-valid { border-color: var(--primary-green) !important; box-shadow: 0 0 8px rgba(0, 200, 83, 0.2); }
+        input.is-invalid { border-color: #ff4444 !important; box-shadow: 0 0 8px rgba(255, 68, 68, 0.2); }
+
+        .status-icon {
+            position: absolute; right: 12px; top: 38px; font-size: 14px; display: none;
+        }
+
+        .glow-button {
+            background: var(--main-gradient);
+            transition: all 0.3s ease;
+            color: #000;
+            font-weight: 800;
+        }
+        .glow-button:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 200, 83, 0.4); }
+       
+    </style>
+</head>
+<body class="py-6 md:py-12 px-4">
+
+    <div class="max-w-5xl mx-auto flex items-center gap-3 mb-10">
+        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center font-bold text-black shadow-lg text-lg">MSR</div>
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Secure <span class="gradient-text">Checkout</span></h1>
+    </div>
+
+    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+        
+        <div class="order-first md:order-none">
+            <div class="bg-[var(--card-bg)] p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-800 md:sticky md:top-10">
+                <h2 class="text-xl font-bold text-white mb-6">तपाईंको Order Summary</h2>
+                
+                <div class="flex gap-4 mb-6">
+                    <div class="w-16 h-16 md:w-20 md:h-20 bg-gray-900 rounded-xl flex items-center justify-center text-yellow-500 border border-gray-800">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-width="2"/></svg>
+                    </div>
+                    <div>
+                        <h3 id="product-title" class="font-bold text-white text-base md:text-lg">Complete Digital Marketing Mastery</h3>
+                        <p class="text-sm text-green-500 font-medium">✓ Lifetime Access</p>
+                        <p id="product-module" class="text-sm text-gray-400">12+ Professional Modules</p>
+                    </div>
+                </div>
+
+                <div class="space-y-3 border-t border-gray-800 pt-4">
+                    <div class="flex justify-between text-gray-400 text-sm"><span>Original Price</span>
+                    <span id="product-oprice" class="line-through">NPR 2,999</span></div>
+                    <div class="flex justify-between text-green-500 font-bold text-sm">
+                    <span id="product-pdiscount">Discount (83% OFF)</span>
+                    <span id="product-vdiscount">- NPR 2,700</span></div>
+                    <div class="flex justify-between text-2xl font-semibold text-white pt-2 border-t border-gray-800">
+                        <span>Total Amount</span>
+                        <span id="product-sprice" class="gradient-text">NPR 299</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-yellow-500/10 p-4 rounded-xl border border-yellow-500/30">
+                    <p id="product-bonus" class="text-xs md:text-sm text-yellow-500 font-semibold text-center uppercase tracking-wider">🎁 Includes 20+ FREE Bonuses!</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-6 text-[10px] md:text-xs text-gray-400 text-center uppercase">
+                    <div id="product-rating" class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">⭐ 4.9/5 Rating</div>
+                    <div id="product-review" class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">👨‍🎓 1,200+ Students</div>
+                    <div class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">⚡ Instant Access</div>
+                    <div class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">🛡 Safe Payment</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col justify-start items-center text-center w-full">
+            
+            <div id="step1" class="step-window active w-full">
+                <button class="w-full glow-button py-5 rounded-2xl shadow-xl text-xl uppercase tracking-tight" onclick="goTo(2)">PROCEED TO CHECKOUT 🚀</button>
+            </div>
+
+            <div id="step2" class="step-window bg-[var(--card-bg)] p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-800 w-full">
+                <h3 class="text-xl font-black mb-3 text-white uppercase">Select <span class="gradient-text">Payment Method</span></h3>
+                <p class="text-sm text-gray-400 mb-6 leading-relaxed">आफ्नो मनपर्ने Payment Option रोज्नुहोस् ।</p>
+                <div class="space-y-3">
+                    <div onclick="showProviders('wallet')" class="method-item p-4 rounded-xl flex items-center justify-between group">
+                        <span class="font-semibold text-gray-200"> 📱 Mobile Wallet</span>
+                        <svg class="w-5 h-5 text-yellow-500 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="2"/></svg>
+                    </div>
+                    <div onclick="showProviders('banking')" class="method-item p-4 rounded-xl flex items-center justify-between group">
+                        <span class="font-semibold text-gray-200"> 🏦 Mobile Banking</span>
+                        <svg class="w-5 h-5 text-yellow-500 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-width="2"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="step3" class="step-window bg-[var(--card-bg)] p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-800 w-full">
+                <button onclick="goTo(2)" class="text-sm text-yellow-500 mb-4 font-semibold flex items-center">← Back to Methods</button>
+                <h3 id="providerTitle" class="text-lg font-bold mb-4 gradient-text uppercase tracking-widest">Select Provider</h3>
+                <div id="providerGrid" class="grid grid-cols-2 gap-3"></div>
+            </div>
+
+            <div id="step4" class="step-window bg-[var(--card-bg)] p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-800 w-full">
+                <button onclick="goTo(3)" class="text-sm text-yellow-500 mb-4 block text-left font-semibold">← Back</button>
+                <div class="inline-block px-4 py-2 bg-green-500/10 text-white rounded-full text-sm font-bold mb-6 border border-green-500/20" id="selectedBadge"></div>
+                
+                <div id="qrTrigger">
+                    <p class="text-sm text-gray-400 mb-6 italic">Secure QR Code निकाल्न तलको button थिच्नुहोस्।</p>
+                    <button onclick="generateQR()" class="w-full border-2 border-dashed border-green-500/40 text-green-500 font-bold py-4 rounded-xl hover:bg-yellow-500/5 transition">GENERATE QR CODE</button>
+                </div>
+
+                <div class="flex justify-center w-full">
+    <div id="qrcode" class="my-6"></div>
+</div>
+
+                
+                <div id="postQR" class="hidden">
+                    <p class="text-xs text-gray-400 mb-6 bg-black/40 p-3 rounded-lg border border-gray-800 leading-relaxed">
+                        QR Scan गरेर <b class="text-green-500 font-bold tracking-wide">NPR 299</b> तिर्नुहोस्। Payment सफल भएपछि मात्र <b class="text-white-500 font-bold tracking-wide">"I HAVE PAID"</b> मा अगाडि बढ्नुहोस्।
+                    </p>
+                    <button class="w-full glow-button py-4 rounded-xl uppercase" onclick="goTo(5)">I HAVE PAID ✅</button>
+                </div>
+            </div>
+
+            <div id="step5" class="step-window bg-[var(--card-bg)] p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-800 w-full text-left">
+                <h3 class="text-xl font-black mb-5 gradient-text text-center uppercase">Verification Details</h3>
+                <div class="space-y-4">
+                    <div class="input-wrapper">
+                        <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-widest uppercase">Full Name *</label>
+                        <input id="userName" class="w-full p-3 rounded-lg" placeholder="पूरा नाम लेख्नुहोस्" oninput="validateField(this, 'name')">
+                        <span class="status-icon" id="nameIcon"></span>
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-widest uppercase">Mobile Number *</label>
+                        <input id="userPhone" type="tel" maxlength="10" class="w-full p-3 rounded-lg" placeholder="९८/९७ बाट सुरु हुने १० अंक" oninput="validateField(this, 'phone')">
+                        <span class="status-icon" id="phoneIcon"></span>
+                    </div>
+                    <div class="input-wrapper">
+                        <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-widest uppercase">Email (Optional)</label>
+                        <input id="userEmail" type="email" class="w-full p-3 rounded-lg" placeholder="example@gmail.com" oninput="validateField(this, 'email')">
+                        <span class="status-icon" id="emailIcon"></span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="input-wrapper">
+                            <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-widest uppercase text-[9px]">TXN ID (OPTIONAL)</label>
+                            <input id="userTxn" class="w-full p-3 rounded-lg" placeholder="TXN ID" oninput="validateField(this, 'txn')">
+                            <span class="status-icon" id="txnIcon"></span>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-gray-500 mb-1 tracking-widest uppercase text-[9px] font-black">PAID AMOUNT (NPR)</label>
+                            <input id="userAmount" class="w-full p-3 rounded-lg text-green-500 font-bold border-green-500/40 bg-green-500/5 cursor-not-allowed" value="299" readonly>
+                        </div>
+                    </div>
+                    <button id="submitBtn" onclick="sendToWhatsApp()" class="w-full glow-button py-4 rounded-xl shadow-lg mt-2 uppercase">ACCESS NOW 🚀</button>
+                </div>
+            </div>
+
+            <p class="text-[10px] text-gray-500 mt-6 tracking-widest uppercase italic font-medium">🔒 100% SECURE & ENCRYPTED PAYMENT</p>
+        </div>
+    </div>
+
+    <div id="successModal" class="fixed inset-0 bg-black/95 hidden flex items-center justify-center z-50 px-4 backdrop-blur-sm">
+        <div class="bg-[#161616] p-8 rounded-3xl text-center max-w-sm w-full border border-green-500/50 shadow-[0_0_50px_rgba(0,200,83,0.1)]">
+            <div class="w-20 h-20 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/20">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-width="3"/></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2">Details Sent! ✅</h2>
+            <p class="text-gray-400 text-sm mb-6 leading-relaxed">हाम्रो टीमले तपाईंको भुक्तानी प्रमाणित गर्दैछ। कृपया <span class="text-yellow-500 font-bold">२-५ मिनेट</span> कुर्नुहोस्।</p>
+            <button onclick="window.location.reload()" class="w-full glow-button py-3 rounded-xl uppercase">OK, म बुझ्छु</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedMethod = "";
+        const ADMIN_WA = "9779702784684";
+
+        const providers = {
+            wallet: [
+                {name:"eSewa", icon:"https://upload.wikimedia.org/wikipedia/commons/1/1b/ESewa_logo.webp"},
+                {name:"Khalti", icon:"https://khalti.com/static/img/khalti-logo.png"},
+                {name:"IME Pay", icon:"https://imepay.com.np/assets/images/logo.png"}
+            ],
+            banking:[
+                {name:"NIC Asia", icon:"https://nicasiabank.com/assets/logo.png"},
+                {name:"Nabil Bank", icon:"https://nabilbank.com/assets/logo.png"},
+                {name:"Global IME", icon:"https://globalimebank.com/images/logo.png"}
+            ]
+        };
+
+        function goTo(step) {
+            document.querySelectorAll('.step-window').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+        }
+
+        function showProviders(type) {
+            const grid = document.getElementById('providerGrid');
+            const title = document.getElementById('providerTitle');
+            grid.innerHTML = '';
+            title.innerText = "Select " + (type === 'wallet' ? 'Wallet' : 'Bank');
+            
+            providers[type].forEach(p => {
+                const btn = document.createElement('div');
+                btn.className = "method-item p-4 rounded-xl flex items-center gap-3";
+                btn.innerHTML = `<img src="${p.icon}" class="w-8 h-8 object-contain rounded"><span class="font-semibold text-gray-200 text-sm">${p.name}</span>`;
+                btn.onclick = () => {
+                    selectedMethod = p.name;
+                    document.getElementById('selectedBadge').innerText = "Method: " + p.name;
+                    document.getElementById('qrTrigger').style.display='block';
+                    document.getElementById('qrcode').innerHTML='';
+                    document.getElementById('postQR').classList.add('hidden');
+                    goTo(4);
+                };
+                grid.appendChild(btn);
+            });
+            goTo(3);
+        }
+
+                function generateQR(){
+            document.getElementById('qrTrigger').style.display='none';
+            const qrDiv = document.getElementById('qrcode');
+            qrDiv.innerHTML = "";
+            
+            // Updated Payload Logic
+            let qrPayload = "";
+            if (selectedMethod === "eSewa") {
+                qrPayload = JSON.stringify({"eSewa_id":"9807648317","name":"Isul Kawari"});
+            } else if (selectedMethod === "Khalti") {
+                qrPayload = JSON.stringify({"Khalti_ID": "9807648317", "name": "Ishul Kawari"});
+            } else {
+                qrPayload = JSON.stringify({
+                    "accountNumber":"0315759479191001",
+                    "accountName":"ISHUL KAWARI",
+                    "bankCode":"BOALNPKA",
+                    "accountType":"Sarbashrestha Sahaj Bachat Khata Online",
+                    "bankCodeCIPS":"2301"
+                });
+            }
+
+            new QRCode(qrDiv, { text: qrPayload, width: 200, height: 200, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
+            document.getElementById('postQR').classList.remove('hidden');
+        }
+        
+        
+        // --- DYNAMIC DATA LOADER FROM URL ---
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // URL bata config data linu
+    const title = urlParams.get('title') || 'Complete Digital Marketing Mastery';
+    const module = urlParams.get('module') || '12+ Professional Modules';
+    const oprice = parseInt(urlParams.get('oprice')) || 2999;
+    const sprice = parseInt(urlParams.get('sprice')) || 299;
+    const currency = urlParams.get('currency') || 'NPR';
+    const bonus = urlParams.get('bonus') || '20+ FREE Bonuses';
+    const rating = urlParams.get('rating') || '4.9';
+    const review = urlParams.get('review') || '1,200+';
+
+    // Discount Calculation
+    const discountAmount = oprice - sprice;
+    const discountPercent = oprice > 0 ? Math.round((discountAmount / oprice) * 100) : 0;
+
+    // UI Updates (IDs matching your HTML)
+    if(document.getElementById('product-title')) document.getElementById('product-title').textContent = title;
+    if(document.getElementById('product-module')) document.getElementById('product-module').textContent = module;
+    
+    if(document.getElementById('product-oprice')) {
+        document.getElementById('product-oprice').textContent = `${currency} ${oprice.toLocaleString()}`;
+    }
+
+    if(document.getElementById('product-sprice')) {
+        // Main Price & Bottom Input Field Update
+        document.getElementById('product-sprice').textContent = `${currency} ${sprice.toLocaleString()}`;
+        document.getElementById('userAmount').value = sprice; 
+        
+        // Discount Labels
+        document.getElementById('product-pdiscount').textContent = `Discount (${discountPercent}% OFF)`;
+        document.getElementById('product-vdiscount').textContent = `- ${currency} ${discountAmount.toLocaleString()}`;
+        
+        // QR Section Text Update
+        const postQRText = document.querySelector('#postQR b.text-green-500');
+        if(postQRText) postQRText.textContent = `${currency} ${sprice.toLocaleString()}`;
+    }
+
+    if(document.getElementById('product-bonus')) document.getElementById('product-bonus').textContent = `🎁 Includes ${bonus}!`;
+    if(document.getElementById('product-rating')) document.getElementById('product-rating').textContent = `⭐ ${rating}/5 Rating`;
+    if(document.getElementById('product-review')) document.getElementById('product-review').textContent = `👨‍🎓 ${review} Students`;
+});
+
+
+
+        // --- VALIDATION LOGIC ---
+function validateField(input, type) {
+    const val = input.value.trim();
+    const icon = document.getElementById(type + 'Icon');
+    let isValid = false;
+
+    if (type === 'name') {
+        isValid = /^[a-zA-Z\s]{5,}$/.test(val);
+    } else if (type === 'phone') {
+        isValid = /^(98|97)[0-9]{8}$/.test(val);
+    } else if (type === 'email') {
+        isValid = val === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    } else if (type === 'txn') {
+        isValid = val === "" || val.length >= 5;
+    }
+
+    if (val === "" && (type === 'email' || type === 'txn')) {
+        input.classList.remove('is-valid', 'is-invalid');
+        icon.style.display = 'none';
+    } else if (isValid) {
+        input.classList.add('is-valid');
+        input.classList.remove('is-invalid');
+        icon.innerHTML = "✅";
+        icon.style.display = "block";
+        icon.style.color = "var(--primary-green)";
+    } else {
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
+        icon.innerHTML = "❌";
+        icon.style.display = "block";
+        icon.style.color = "#ff4444";
+    }
+}
+
+function sendToWhatsApp() {
+    const name = document.getElementById('userName').value.trim();
+    const phone = document.getElementById('userPhone').value.trim();
+    const email = document.getElementById('userEmail').value.trim();
+    const txn = document.getElementById('userTxn').value.trim();
+    const amt = document.getElementById('userAmount').value;
+
+    // Validation Checks
+    if (name.length < 5) {
+        alert("कृपया आफ्नो पूरा नाम (कम्तिमा ५ अक्षर) लेख्नुहोस्!");
+        document.getElementById('userName').focus();
+        return;
+    }
+    if (!/^(98|97)[0-9]{8}$/.test(phone)) {
+        alert("कृपया सही मोबाइल नम्बर (९७ वा ९८ बाट सुरु हुने १० अंक) लेख्नुहोस्!");
+        document.getElementById('userPhone').focus();
+        return;
+    }
+    if (email !== "" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert("कृपया सही ईमेल ठेगाना लेख्नुहोस्!");
+        document.getElementById('userEmail').focus();
+        return;
+    }
+    if (txn !== "" && txn.length < 5) {
+        alert("कृपया सही TXN ID लेख्नुहोस्!");
+        document.getElementById('userTxn').focus();
+        return;
+    }
+
+    // WhatsApp Message
+    const msg = `*NEW COURSE PURCHASE*%0A*Full Name:* ${name}%0A*Mobile Number:* ${phone}%0A*Paid Amount:* NPR ${amt}%0A*Email:* ${email || "Not Provided"}%0A*TXN ID:* ${txn || "Not Provided"}%0A*Method:* ${selectedMethod}`;
+    
+    window.open(`https://wa.me/${ADMIN_WA}?text=${msg}`, '_blank');
+    document.getElementById('successModal').classList.remove('hidden');
+    resetForm(); 
+}
+
+function resetForm() {
+    document.getElementById('userName').value = "";
+    document.getElementById('userPhone').value = "";
+    document.getElementById('userEmail').value = "";
+    document.getElementById('userTxn').value = "";
+    document.querySelectorAll('.status-icon').forEach(icon => icon.style.display = 'none');
+    document.querySelectorAll('input').forEach(input => {
+        if(!input.readOnly) input.classList.remove('is-valid', 'is-invalid');
+    });
+}
+
+    </script>
+</body>
+</html>
