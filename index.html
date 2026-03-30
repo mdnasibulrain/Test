@@ -261,17 +261,31 @@
             goTo(3);
         }
 
-        function generateQR(){
+                function generateQR(){
             document.getElementById('qrTrigger').style.display='none';
             const qrDiv = document.getElementById('qrcode');
             qrDiv.innerHTML = "";
-            let qrPayload = (selectedMethod === "eSewa" || selectedMethod === "Khalti") 
-                ? `{ "ID":"9807648317", "Name":"Ishul Kawari", "Amount":"299" }`
-                : `{ "Acc":"0315759479191001", "Name":"ISHUL KAWARI", "Amount":"299" }`;
+            
+            // Updated Payload Logic
+            let qrPayload = "";
+            if (selectedMethod === "eSewa") {
+                qrPayload = JSON.stringify({"eSewa_id":"9807648317","name":"Isul Kawari"});
+            } else if (selectedMethod === "Khalti") {
+                qrPayload = JSON.stringify({"Khalti_ID": "9807648317", "name": "Ishul Kawari"});
+            } else {
+                qrPayload = JSON.stringify({
+                    "accountNumber":"0315759479191001",
+                    "accountName":"ISHUL KAWARI",
+                    "bankCode":"BOALNPKA",
+                    "accountType":"Sarbashrestha Sahaj Bachat Khata Online",
+                    "bankCodeCIPS":"2301"
+                });
+            }
 
             new QRCode(qrDiv, { text: qrPayload, width: 200, height: 200, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
             document.getElementById('postQR').classList.remove('hidden');
         }
+
 
         // --- VALIDATION LOGIC ---
 function validateField(input, type) {
@@ -356,6 +370,5 @@ function resetForm() {
 }
 
     </script>
-
 </body>
 </html>
