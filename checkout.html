@@ -70,6 +70,19 @@
             font-weight: 800;
         }
         .glow-button:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 200, 83, 0.4); }
+        
+                
+        .feature-tag { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 8px; border-radius: 12px; }
+
+       /* Step 1 मा बटनलाई अलि तल देखाउन र टल्कन मद्दत गर्छ */
+#step1.active {
+    margin-top: -10px;
+}
+
+#mainContainer {
+    transition: max-width 0.4s ease-in-out;
+}
+
        
     </style>
 </head>
@@ -80,22 +93,49 @@
         <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Secure <span class="gradient-text">Checkout</span></h1>
     </div>
 
-    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+    <div id="mainContainer" class="max-w-2xl mx-auto flex flex-col gap-8 transition-all duration-500">
+
         
         <div class="order-first md:order-none">
-            <div class="bg-[var(--card-bg)] p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-800 md:sticky md:top-10">
-                <h2 class="text-xl font-bold text-white mb-6">तपाईंको Order Summary</h2>
+                        <div class="bg-[var(--card-bg)] p-6 pt-4 md:p-8 rounded-2xl shadow-2xl border border-gray-800 md:top-10">
+                <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><span class="w-2 h-6 gradient-bg rounded-full"></span>तपाईंको Order Summary</h2>
+
                 
-                <div class="flex gap-4 mb-6">
+                                <div class="flex gap-4 mb-2">
+
                     <div class="w-16 h-16 md:w-20 md:h-20 bg-gray-900 rounded-xl flex items-center justify-center text-yellow-500 border border-gray-800">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-width="2"/></svg>
                     </div>
                     <div>
-                        <h3 id="product-title" class="font-bold text-white text-base md:text-lg">Complete Digital Marketing Mastery</h3>
-                        <p class="text-sm text-green-500 font-medium">✓ Lifetime Access</p>
-                        <p id="product-module" class="text-sm text-gray-400">12+ Professional Modules</p>
+                                                <h3 id="product-title" class="font-bold text-white text-base md:text-lg ">Complete Digital Marketing Mastery</h3>
+                        <div id="rating-box" class="flex items-center pt-1 gap-2">
+                        <span id="product-module" class="bg-yellow-500/10 text-gray-300 px-2 py-0.5 rounded text-xs font-bold border border-yellow-500/20">📚 12+ Professional Modules</span>
+                    </div>
                     </div>
                 </div>
+                
+                                    
+                
+                
+                <div id="feature-grid" class="grid grid-cols-2 gap-2 mb-5">
+                <div class="feature-tag flex items-center justify-center gap-0">
+                    
+                    <span id="product-rating" class="text-[10px] font-bold text-yellow-500 uppercase leading-none">⭐ 4.9/5 RATING</span>
+                </div>
+                <div class="feature-tag flex items-center justify-center gap-0">
+                    
+                    <span id="product-bonus" class="text-[10px] font-bold text-green-500 uppercase leading-none">🎁 20+ FREE Bonuses!</span>
+                </div>
+                <div class="feature-tag flex items-center justify-center gap-0">
+                    
+                    <span class="text-[10px] font-bold text-green-500 uppercase leading-none">✅  Lifetime Access</span>
+                </div>
+                <div class="feature-tag flex items-center justify-center gap-0">
+                    
+                    <span class="text-[10px] font-bold text-blue-400 uppercase leading-none">⚡ Instant Download</span>
+                    
+                    </div>
+                    </div>
 
                 <div class="space-y-3 border-t border-gray-800 pt-4">
                     <div class="flex justify-between text-gray-400 text-sm"><span>Original Price</span>
@@ -108,17 +148,7 @@
                         <span id="product-sprice" class="gradient-text">NPR 299</span>
                     </div>
                 </div>
-
-                <div class="mt-6 bg-yellow-500/10 p-4 rounded-xl border border-yellow-500/30">
-                    <p id="product-bonus" class="text-xs md:text-sm text-yellow-500 font-semibold text-center uppercase tracking-wider">🎁 Includes 20+ FREE Bonuses!</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 mt-6 text-[10px] md:text-xs text-gray-400 text-center uppercase">
-                    <div id="product-rating" class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">⭐ 4.9/5 Rating</div>
-                    <div id="product-review" class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">👨‍🎓 1,200+ Students</div>
-                    <div class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">⚡ Instant Access</div>
-                    <div class="bg-black/40 p-2 rounded border border-gray-800 tracking-tighter">🛡 Safe Payment</div>
-                </div>
+                
             </div>
         </div>
 
@@ -216,7 +246,6 @@
             <h2 class="text-2xl font-bold text-white mb-2">Details Sent! ✅</h2>
             <p class="text-gray-400 text-sm mb-6 leading-relaxed">हाम्रो टीमले तपाईंको भुक्तानी प्रमाणित गर्दैछ। कृपया <span class="text-yellow-500 font-bold">२-५ मिनेट</span> कुर्नुहोस्।</p>
             <button onclick="window.location.href='index.html'" class="w-full glow-button py-3 rounded-xl uppercase">OK, म बुझ्छु</button>
-
         </div>
     </div>
 
@@ -238,9 +267,22 @@
         };
 
         function goTo(step) {
-            document.querySelectorAll('.step-window').forEach(el => el.classList.remove('active'));
-            document.getElementById('step' + step).classList.add('active');
-        }
+    const container = document.getElementById('mainContainer');
+    
+    if (step >= 2) {
+        // Checkout सुरु भएपछि Two Column बनाउने
+        container.classList.remove('max-w-2xl', 'flex-col');
+        container.classList.add('max-w-5xl', 'grid', 'md:grid-cols-2');
+    } else {
+        // Step 1 मा हुँदा Single Column बनाउने
+        container.classList.add('max-w-2xl', 'flex-col');
+        container.classList.remove('max-w-5xl', 'grid', 'md:grid-cols-2');
+    }
+
+    document.querySelectorAll('.step-window').forEach(el => el.classList.remove('active'));
+    document.getElementById('step' + step).classList.add('active');
+}
+
 
         function showProviders(type) {
             const grid = document.getElementById('providerGrid');
@@ -297,12 +339,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // URL bata config data linu
     const title = urlParams.get('title') || 'Complete Digital Marketing Mastery';
-    const module = urlParams.get('module') || '12+ Professional Modules';
+    const module = urlParams.get('module') || '📚 12+ Professional Modules';
     const oprice = parseInt(urlParams.get('oprice')) || 2999;
     const sprice = parseInt(urlParams.get('sprice')) || 299;
     const currency = urlParams.get('currency') || 'NPR';
-    const bonus = urlParams.get('bonus') || '20+ FREE Bonuses';
-    const rating = urlParams.get('rating') || '4.9';
+    const bonus = urlParams.get('bonus') || '🎁 20+ FREE Bonuses!';
+    const rating = urlParams.get('rating') || '⭐ 4.9/5 RATING';
     const review = urlParams.get('review') || '1,200+';
 
     // Discount Calculation
@@ -331,8 +373,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if(postQRText) postQRText.textContent = `${currency} ${sprice.toLocaleString()}`;
     }
 
-    if(document.getElementById('product-bonus')) document.getElementById('product-bonus').textContent = `🎁 Includes ${bonus}!`;
-    if(document.getElementById('product-rating')) document.getElementById('product-rating').textContent = `⭐ ${rating}/5 Rating`;
+    if(document.getElementById('product-bonus')) document.getElementById('product-bonus').textContent = bonus;
+if(document.getElementById('product-rating')) document.getElementById('product-rating').textContent = rating;
     if(document.getElementById('product-review')) document.getElementById('product-review').textContent = `👨‍🎓 ${review} Students`;
 });
 
@@ -408,11 +450,11 @@ function sendToWhatsApp() {
     document.getElementById('successModal').classList.remove('hidden');
     
     // Optional: 5 second pachhi aafai Landing Page ma pathaune yadi user le click garena bhane pani
-    
+    /*
     setTimeout(() => {
         window.location.href = 'index.html';
     }, 5000);
-    
+    */
     
     resetForm(); 
 }
