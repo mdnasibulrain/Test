@@ -94,6 +94,56 @@
     animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+
+.glow-button {
+    position: relative;
+    overflow: hidden;
+    background: var(--main-gradient);
+    background-size: 200% 200%;
+    color: black !important;
+    border: none;
+    transition: all 0.5s ease;
+    z-index: 1;
+    animation: gradientMove 5s ease infinite;
+}
+
+/* Shimmer Effect (Shiny line passing through) */
+.glow-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmerEffect 3s infinite;
+    z-index: 2;
+}
+
+/* Hover & Active States */
+.glow-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 200, 83, 0.4);
+}
+
+.glow-button:active {
+    transform: scale(0.95);
+}
+
+/* Animations */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmerEffect {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+
+
        
     </style>
 </head>
@@ -104,26 +154,37 @@
         <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white">Secure <span class="gradient-text">Checkout</span></h1>
     </div>
 
-<div id="main-container" class="max-w-2xl mx-auto grid grid-cols-1 gap-8 transition-all duration-700 ease-in-out">
+<div id="main-container" class="max-w-2xl mx-auto grid grid-cols-1 transition-all duration-700 ease-in-out">
 
         
         <div class="order-first md:order-none">
-                        <div class="bg-[var(--card-bg)] p-6 pt-4 md:p-8 rounded-2xl shadow-2xl border border-gray-800 md:sticky md:top-10">
-                <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><span class="w-2 h-6 gradient-bg rounded-full"></span>तपाईंको Order Summary</h2>
-
+                        <div class="bg-[var(--card-bg)] p-4 pb-2 pt-4 md:p-8 rounded-2xl shadow-2xl border border-gray-800 md:sticky md:top-10 relative overflow-hidden">
+                        
+                        <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl animate-pulse tracking-widest uppercase">
+            🔥 High Demand
+        </div>
+        
+                <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><span class="w-2 h-6 gradient-bg rounded-full animate-pulse"></span>तपाईंको Order Summary</h2>
                 
                                 <div class="flex gap-4 mb-2">
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-yellow-500 to-green-500 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                <div class="relative w-20 h-20 md:w-24 md:h-24 bg-gray-900 rounded-xl flex items-center justify-center border border-gray-700 overflow-hidden shadow-inner">
+                    <img src="https://img.icons8.com/external-flatart-icons-flat-flatarticons/128/external-book-education-flatart-icons-flat-flatarticons-1.png" alt="Book Icon" class="w-12 h-12 md:w-14 md:h-14 object-contain">
+                </div>
+            </div>
 
-                    <div class="w-16 h-16 md:w-20 md:h-20 bg-gray-900 rounded-xl flex items-center justify-center text-yellow-500 border border-gray-800">
-                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-width="2"/></svg>
-                    </div>
-                    <div>
-                                                <h3 id="product-title" class="font-bold text-white text-base md:text-lg ">Complete Digital Marketing Mastery</h3>
-                        <div id="rating-box" class="flex items-center pt-1 gap-2">
-                        <span id="product-module" class="bg-yellow-500/10 text-gray-300 px-2 py-0.5 rounded text-xs font-bold border border-yellow-500/20">📚 12+ Professional Modules</span>
-                    </div>
+            <div>
+                <h3 id="product-title" class="font-extrabold text-white text-base md:text-xl leading-tight">Complete Digital Marketing Mastery</h3>
+                <div id="rating-box" class="flex flex-col pt-1 gap-1">
+                    <span id="product-module" class="text-gray-400 text-xs font-medium">📚 12+ Professional Video Modules</span>
+                    <div class="flex items-center gap-2">
+                        <span class="flex text-yellow-500 text-[10px]">⭐⭐⭐⭐⭐</span>
+                        <span class="text-[9px] text-green-400 font-bold bg-green-500/10 px-2 py-0.5 rounded-full border border-green-500/20">VERIFIED SELLER</span>
                     </div>
                 </div>
+            </div>
+        </div>
                 
                                     
                 
@@ -147,26 +208,67 @@
                     
                     </div>
                     </div>
-
-                <div class="space-y-3 border-t border-gray-800 pt-4">
-                    <div class="flex justify-between text-gray-400 text-sm"><span>Original Price</span>
-                    <span id="product-oprice" class="line-through">NPR 2,999</span></div>
-                    <div class="flex justify-between text-green-500 font-bold text-sm">
-                    <span id="product-pdiscount">Discount (83% OFF)</span>
-                    <span id="product-vdiscount">- NPR 2,700</span></div>
-                    <div class="flex justify-between text-2xl font-semibold text-white pt-2 border-t border-gray-800">
-                        <span>Total Amount</span>
-                        <span id="product-sprice" class="gradient-text">NPR 299</span>
-                    </div>
+                    
+                    <div class="mb-2 bg-black/40 pl-1 rounded-2xl border border-gray-800/50">
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Offer Inventory Status</span>
+                    <span class="text-[11px] font-black text-red-500 animate-pulse">ONLY 7 COPIES LEFT! ⚠️</span>
                 </div>
+                <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden flex">
+                    <div class="h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.5)]" style="width: 93%;"></div>
+                </div>
+                <div class="flex justify-between mt-2 font-bold text-[10px] uppercase">
+                    <span class="text-green-500">Sold: 493</span>
+                    <span class="text-gray-500">Total: 500</span>
+                    <span class="text-red-500">93% SOLD</span>
+                </div>
+                <div class="flex items-center justify-center gap-1 mt-1">
+                    <span class="text-green-500 text-[10px] font-bold">●</span>
+                    <span class="text-gray-400 text-[10px] uppercase tracking-widest font-medium animate-pulse">48 people viewing this now</span>
+                </div>
+            </div>
+                    
+                    <div class="space-y-3 border-t border-gray-800 pt-6">
+            <div class="flex justify-between text-gray-400 text-sm">
+                <span>Value of Course + Bonuses</span>
+                <span id="product-oprice" class="line-through">NPR 2,999</span>
+            </div>
+            <div class="flex justify-between text-green-500 font-bold text-sm bg-green-500/5 p-2 rounded-lg border border-green-500/10">
+                    <span id="product-pdiscount">🔥 Anniversary Discount (90% OFF)</span>
+                    <span id="product-vdiscount">- NPR 2,700</span>
+                </div>
+            <div class="flex justify-between items-center pt-4 border-t border-gray-800">
+                <div class="flex flex-col">
+                    <span class="text-2xl font-black text-white leading-none">Total Amount</span>
+                    <span class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mt-1">Inclusive of all taxes</span>
+                </div>
+                <span id="product-sprice" class="text-3xl font-black gradient-text">NPR 299</span>
+            </div>
+        </div>
+
+               <p class="text-[9px] text-right text-gray-500 mr-1 italic">*Offer ends in <span class="text-yellow-500 font-bold" id="countdown">09:55</span> mins</p>
+               
+               <h4 class="text-red-500 text-center font-bold text-lg mb-2 italic">"Your Success Starts Today!"</h4>
+        <p class="text-gray-400 text-center text-sm leading-relaxed">बधाई छ! तपाईं आफ्नो डिजिटल यात्राको निकै नजिक हुनुहुन्छ। यो विशेष छुट अर्को <span class="text-yellow-500 font-bold">१० मिनेट</span> सम्म मात्र उपलब्ध रहनेछ।</p>
                 
             </div>
         </div>
+        
 
         <div class="flex flex-col justify-start items-center text-center w-full">
             
             <div id="step1" class="step-window active w-full">
-                <button class="w-full glow-button py-5 rounded-2xl shadow-xl text-xl uppercase tracking-tight" onclick="goTo(2)">PROCEED TO CHECKOUT 🚀</button>
+    
+    <p class="text-[11px] text-gray-500 mb-2 mt-3 italic tracking-wide">"The best investment you can make is in yourself." — Warren Buffett</p>
+            
+            <button class="w-full glow-button py-3 rounded-2xl shadow-xl uppercase tracking-wide" onclick="goTo(2)">
+    <div class="flex flex-col items-center justify-center">
+        <span class="text-2xl font-black mb-0.5">PROCEED TO CHECKOUT</span>
+        <span class="text-black/70 text-[10px] font-bold uppercase tracking-widest">Click to achieve your goal 🎯</span>
+    </div>
+</button>
+
+            
             </div>
 
             <div id="step2" class="step-window bg-[var(--card-bg)] p-6 md:p-8 rounded-2xl shadow-2xl border border-gray-800 w-full">
@@ -244,8 +346,21 @@
                     <button id="submitBtn" onclick="sendToWhatsApp()" class="w-full glow-button py-4 rounded-xl shadow-lg mt-2 uppercase">ACCESS NOW 🚀</button>
                 </div>
             </div>
+            
+            <div class="flex items-center gap-3 pt-8 bg-blue-500/5 rounded-xl border border-blue-500/10">
+            <div class="flex -space-x-2">
+            
+                <img class="w-6 h-6 rounded-full border-2 border-gray-900" src="https://i.pravatar.cc/100?u=ram" alt="user">
+                <img class="w-6 h-6 rounded-full border-2 border-gray-900" src="https://i.pravatar.cc/100?u=Sahil" alt="user">
+                <img class="w-6 h-6 rounded-full border-2 border-gray-900" src="https://i.pravatar.cc/100?u=shyam" alt="user">
+                <img class="w-6 h-6 rounded-full border-2 border-gray-900" src="https://i.pravatar.cc/100?u=lucky" alt="user">
+                <img class="w-6 h-6 rounded-full border-2 border-gray-900" src="https://i.pravatar.cc/100?u=puman" alt="user">
+                <div class="w-6 h-6 rounded-full bg-gray-800 border-2 border-gray-900 flex items-center justify-center text-[8px] text-white font-bold">+1k</div>
+            </div>
+            <p class="text-[11px] text-blue-300 font-medium">Joined by <span class="font-black">1,200+</span> Smart Marketers Today!</p>
+        </div>
 
-            <p class="text-[10px] text-gray-500 mt-6 tracking-widest uppercase italic font-medium">🔒 100% SECURE & ENCRYPTED PAYMENT</p>
+            <p class="text-[10px] text-gray-500 mt-3 tracking-widest uppercase italic font-medium">🔒 100% SECURE & ENCRYPTED PAYMENT</p>
         </div>
     </div>
 
@@ -376,7 +491,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('userAmount').value = sprice; 
         
         // Discount Labels
-        document.getElementById('product-pdiscount').textContent = `Discount (${discountPercent}% OFF)`;
+        document.getElementById('product-pdiscount').textContent = `🔥 Anniversary Discount (${discountPercent}% OFF)`;
         document.getElementById('product-vdiscount').textContent = `- ${currency} ${discountAmount.toLocaleString()}`;
         
         // QR Section Text Update
@@ -480,6 +595,105 @@ function resetForm() {
         if(!input.readOnly) input.classList.remove('is-valid', 'is-invalid');
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Configuration ---
+    let total = 489;
+    let sold = 473;
+    const minLeft = 1; // 1 copy par aakar ruk jayega
+    const updateSpeed = 30000; // 30 Seconds
+
+    // --- Selectors (Targeting by hierarchy since classes repeat) ---
+    const inventoryContainer = document.querySelector('.mb-2.bg-black\\/40');
+    const statusText = inventoryContainer.querySelector('.text-red-500.animate-pulse'); // ONLY X LEFT
+    const progressBar = inventoryContainer.querySelector('.h-full.bg-gradient-to-r'); // Progress bar
+    const statsRow = inventoryContainer.querySelectorAll('.flex.justify-between.mt-2 span');
+    const soldLabel = statsRow[0]; // Sold: X
+    const totalLabel = statsRow[1]; // Total: Y
+    const percentLabel = statsRow[2]; // Z% SOLD
+    const viewingLabel = inventoryContainer.querySelector('.text-gray-400.animate-pulse'); // People viewing
+
+    function updateStock() {
+        if (total - sold > minLeft) {
+            sold++;
+            
+            const left = total - sold;
+            const percentage = Math.floor((sold / total) * 100);
+
+            // 1. Update Text Content
+            statusText.innerText = `ONLY ${left} COPIES LEFT! ⚠️`;
+            soldLabel.innerText = `Sold: ${sold}`;
+            totalLabel.innerText = `Total: ${total}`;
+            percentLabel.innerText = `${percentage}% SOLD`;
+
+            // 2. Update Progress Bar smoothly
+            progressBar.style.transition = "width 2s cubic-bezier(0.4, 0, 0.2, 1)";
+            progressBar.style.width = `${percentage}%`;
+        }
+    }
+
+    function updateViewers() {
+        // Randomize between 22 to 43
+        const randomViewers = Math.floor(Math.random() * (43 - 22 + 1)) + 22;
+        viewingLabel.innerText = `${randomViewers} people viewing this now`;
+    }
+
+    // --- Initialize ---
+    // Pehle initial values set kar dete hain jo aapne di hain
+    const initialPercent = Math.floor((sold / total) * 100);
+    statusText.innerText = `ONLY ${total - sold} COPIES LEFT! ⚠️`;
+    soldLabel.innerText = `Sold: ${sold}`;
+    totalLabel.innerText = `Total: ${total}`;
+    percentLabel.innerText = `${initialPercent}% SOLD`;
+    progressBar.style.width = `${initialPercent}%`;
+
+    // --- Intervals ---
+    setInterval(updateStock, updateSpeed);
+    setInterval(updateViewers, 25000); // Viewers har 4 second mein change honge realistic feel ke liye
+    
+    updateViewers(); // Immediate call for viewers
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Initial Time Set (9 minutes and 59 seconds)
+    let timeInSeconds = (9 * 60) + 59; 
+    const countdownElement = document.getElementById('countdown');
+    
+    // Niche ke text wale span ko target karne ke liye (jo 10 minutes likha hai)
+    const minutesDisplay = document.querySelector('p.text-gray-400 span.text-yellow-500.font-bold');
+
+    const timer = setInterval(() => {
+        // 2. Minutes aur Seconds calculate karein
+        let minutes = Math.floor(timeInSeconds / 60);
+        let seconds = timeInSeconds % 60;
+
+        // 3. Formatting (Single digit ke aage 0 lagane ke liye)
+        let displayMinutes = minutes < 10 ? '0' + minutes : minutes;
+        let displaySeconds = seconds < 10 ? '0' + seconds : seconds;
+
+        // 4. Update UI (Timer display)
+        if (countdownElement) {
+            countdownElement.textContent = `${displayMinutes}:${displaySeconds}`;
+        }
+
+        // 5. Niche wale text (१० मिनेट) ko match karein
+        // Hum dynamically text update karenge: "अर्को X मिनेट सम्म मात्र"
+        if (minutesDisplay) {
+            minutesDisplay.textContent = `${minutes + (seconds > 0 ? 1 : 0)} मिनेट`;
+        }
+
+        // 6. Stop timer at 00:00
+        if (timeInSeconds <= 0) {
+            clearInterval(timer);
+            if (countdownElement) countdownElement.textContent = "00:00";
+        } else {
+            timeInSeconds--;
+        }
+
+    }, 1000); // Har 1 second mein chalega
+});
+
+
 
     </script>
 </body>
