@@ -303,9 +303,9 @@ body {
                         <span class="bg-blue-500/20 text-white-400 px-3 py-1 rounded-full text-xs font-semibold">🔒 Instant </span>
                     </div>
                     <div class="grid grid-cols-4 gap-2 py-4 bg-[#161616]/50 border border-white/5 rounded-2xl mb-1">
-                        <div class="text-center border-r border-white/5"><p class="text-yellow-400 font-bold text-sm"><span id="product_ratings">4.9</span> ★</p><p class="text-[10px] text-gray-500 uppercase">Rating</p></div>
-                        <div class="text-center border-r border-white/5"><p class="text-white font-bold text-sm"><span id="product_reviews">1.2k+</span></p><p class="text-[10px] text-gray-500 uppercase">Reviews</p></div>
-                        <div class="text-center border-r border-white/5"><p class="text-green-400 font-bold text-sm"><span id="product_sold">1.2k+</span></p><p class="text-[10px] text-gray-500 uppercase">Sold</p></div>
+                        <div class="text-center border-r border-white/5"><p class="text-yellow-400 font-bold text-sm">4.9 ★</p><p class="text-[10px] text-gray-500 uppercase">Rating</p></div>
+                        <div class="text-center border-r border-white/5"><p class="text-white font-bold text-sm">1.2k+</p><p class="text-[10px] text-gray-500 uppercase">Reviews</p></div>
+                        <div class="text-center border-r border-white/5"><p class="text-green-400 font-bold text-sm">1.8k+</p><p class="text-[10px] text-gray-500 uppercase">Sold</p></div>
                         <div class="text-center"><p class="text-red-400 font-bold text-sm animate-pulse"><span id="hero-copies">20</span></p><p class="text-[10px] text-gray-500 uppercase">Left</p></div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -326,10 +326,10 @@ body {
             </div>
 <!-- Hero Content -->
       <div class="flex flex-col justify-center">
-                <h1 id="product_title" class="text-3xl md:text-5xl font-black leading-tight">Master <span class="gradient-text">Digital Skills</span> & Transform Your Career</h1>
+                <h1 class="text-3xl md:text-5xl font-black leading-tight">Master <span class="gradient-text">Digital Skills</span> & Transform Your Career</h1>
                 <div class="flex items-center gap-4 mt-4">
                     <span class="text-yellow-400 text-xl">★★★★★</span>
-                    <span id="product_ratings" class="text-gray-400">(4.9/5)</span>
+                    <span class="text-gray-400">(4.9/5)</span>
                     <span class="text-green-400 font-semibold">1,800+ Students</span>
                 </div>
                 <p class="text-gray-300 text-lg mt-4">The ultimate course to go from beginner to pro. Learn industry secrets & practical techniques.</p>
@@ -1195,8 +1195,8 @@ body {
                 </div>
 
                 <div class="flex items-center justify-center gap-4 mb-2">
-                    <span id="final-original-price" class="text-3xl text-gray-500 line-through">₹4,999</span> 
-                    <span id="final-sale-price" class="text-5xl font-black gradient-text">₹499</span>
+                    <span class="text-3xl text-gray-500 line-through">₹ <span id="final-original-price">4,999</span></span> 
+                    <span class="text-5xl font-black gradient-text"> ₹ <span id="final-sale-price">499</span></span>
                 </div>
                 
                 <div class="text-center mb-6">
@@ -1346,11 +1346,11 @@ const defaultConfig = {
     product_module: '12+ Professional Steps',
     original_price: 1000,
     sale_price: 100,
-    product_bonus: '20+ Free Bonus',
-    product_rating: '4.9',
+    product_bonus: '🎁 20+ FREE Bonuses!',
+    product_rating: '⭐ 4.9/5 RATING',
     product_review: '2.5k+',
     whatsapp_number: '+9779807648317',
-    currency: 'रु.'
+    currency: 'NPR'
 };
 
 // Global state controller
@@ -1404,8 +1404,8 @@ function updateAllPricesAndMath() {
     const updates = {
         'urgency-original-price': `${currency} ${original}`,
         'urgency-sale-price': `${currency} ${sale}`,
-        'final-original-price': `${currency} ${original}`,
-        'final-sale-price': `${currency} ${sale}`,
+        'final-original-price': original,
+        'final-sale-price': sale,
         'bottom-original-price': original, 
         'bottom-sale-price': sale,
         'urgency-save-amount': `${currency} ${saveAmount.toLocaleString()}`,
@@ -1562,7 +1562,6 @@ window.handleBuyNow = function() {
     // Checkout page ma data pathaune
     window.location.href = `checkout.html?${params}`;
 };
-
 
 /* 6. DOM INITIALIZATION */
 
